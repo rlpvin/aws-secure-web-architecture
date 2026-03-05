@@ -46,3 +46,12 @@ module "storage" {
 
   project_name = var.project_name
 }
+
+module "cdn" {
+  source = "./modules/cdn"
+
+  project_name  = var.project_name
+  alb_dns_name  = module.loadbalancer.alb_dns_name
+  bucket_name   = module.storage.bucket_name
+  bucket_arn    = module.storage.bucket_arn
+}
