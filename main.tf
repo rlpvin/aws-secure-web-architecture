@@ -16,3 +16,11 @@ module "loadbalancer" {
   public_subnets = module.network.public_subnets
   alb_security_group_id = module.security.alb_sg_id
 }
+
+module "compute" {
+  source = "./modules/compute"
+
+  project_name = var.project_name
+  private_subnets = module.network.private_subnets
+  ec2_security_group_id = module.security.ec2_sg_id
+}
