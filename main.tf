@@ -24,3 +24,12 @@ module "compute" {
   private_subnets = module.network.private_subnets
   ec2_security_group_id = module.security.ec2_sg_id
 }
+
+module "autoscaling" {
+  source = "./modules/autoscaling"
+
+  project_name = var.project_name
+  private_subnets = module.network.private_subnets
+  launch_template_id = module.compute.launch_template_id
+  target_group_arn = module.loadbalancer.target_group_arn
+}
