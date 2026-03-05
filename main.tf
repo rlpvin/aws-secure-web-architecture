@@ -40,3 +40,9 @@ module "monitoring" {
   project_name = var.project_name
   asg_name = module.autoscaling.asg_name
 }
+
+module "storage" {
+  source = "./modules/storage"
+
+  project_name = var.project_name
+}
