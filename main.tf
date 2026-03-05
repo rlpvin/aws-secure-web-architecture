@@ -33,3 +33,10 @@ module "autoscaling" {
   launch_template_id = module.compute.launch_template_id
   target_group_arn = module.loadbalancer.target_group_arn
 }
+
+module "monitoring" {
+  source = "./modules/monitoring"
+
+  project_name = var.project_name
+  asg_name = module.autoscaling.asg_name
+}
