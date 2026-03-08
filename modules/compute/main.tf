@@ -1,9 +1,9 @@
 data "aws_ami" "amazon_linux" {
   most_recent = true
-  owners = ["amazon"]
+  owners      = ["amazon"]
 
   filter {
-    name = "name"
+    name   = "name"
     values = ["al2023-ami-*-x86_64"]
   }
 }
@@ -24,7 +24,7 @@ resource "aws_iam_role" "ec2_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_policy" {
-  role = aws_iam_role.ec2_role.name
+  role       = aws_iam_role.ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
@@ -34,8 +34,8 @@ resource "aws_iam_instance_profile" "ec2_profile" {
 }
 
 resource "aws_launch_template" "this" {
-  name_prefix = "${var.project_name}-lt-"
-  image_id = data.aws_ami.amazon_linux.id
+  name_prefix   = "${var.project_name}-lt-"
+  image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
 
   iam_instance_profile {
@@ -44,7 +44,7 @@ resource "aws_launch_template" "this" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [var.ec2_security_group_id]
+    security_groups             = [var.ec2_security_group_id]
   }
 
   user_data = base64encode(file("${path.root}/user-data/install-nginx.sh"))
