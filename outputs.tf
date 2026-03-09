@@ -1,9 +1,9 @@
 output "alb_dns" {
-  value = module.loadbalancer.alb_dns_name
+  value = "http://${module.loadbalancer.alb_dns_name}"
 }
 
 output "cloudfront_url" {
-  value = module.cdn.cloudfront_domain
+  value = "http://${module.cdn.cloudfront_domain}"
 }
 
 output "dns_nameservers" {

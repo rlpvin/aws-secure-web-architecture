@@ -47,6 +47,18 @@ module "storage" {
   project_name = var.project_name
 }
 
+module "acm" {
+  source = "./modules/acm"
+
+  domain_name       = var.domain_name
+  subdomain         = var.subdomain
+  create_certificate = true
+
+  providers = {
+    aws = aws.us_east_1
+  }
+}
+
 module "cdn" {
   source = "./modules/cdn"
 
@@ -56,7 +68,7 @@ module "cdn" {
   bucket_arn   = module.storage.bucket_arn
 
   aliases         = ["${var.subdomain}.${var.domain_name}"]
-  certificate_arn = module.dns.certificate_arn
+  certificate_arn = module.acm.certificate_arn
 }
 
 module "dns" {
@@ -65,6 +77,8 @@ module "dns" {
   domain_name       = var.domain_name
   subdomain         = var.subdomain
   cloudfront_domain = module.cdn.cloudfront_domain
+  certificate_arn   = module.acm.certificate_arn
+  domain_validation_options = module.acm.domain_validation_options
 
   providers = {
     aws = aws.us_east_1

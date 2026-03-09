@@ -10,6 +10,18 @@ variable "cloudfront_domain" {
   type = string
 }
 
+variable "certificate_arn" {
+  description = "ARN of the ACM certificate"
+  type        = string
+  default     = ""
+}
+
+variable "domain_validation_options" {
+  description = "Domain validation options for the certificate"
+  type        = list(any)
+  default     = []
+}
+
 # certificate is created for the full website name generated from domain+subdomain
 variable "create_certificate" {
   description = "Whether to request an ACM certificate for the site (us-east-1)"
