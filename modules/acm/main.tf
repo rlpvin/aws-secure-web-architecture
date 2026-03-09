@@ -11,7 +11,6 @@ locals {
   fqdn = "${var.subdomain}.${var.domain_name}"
 }
 
-# request an ACM certificate in us-east-1 and validate via DNS
 resource "aws_acm_certificate" "cdn" {
   count             = var.create_certificate ? 1 : 0
   domain_name       = local.fqdn

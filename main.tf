@@ -44,7 +44,8 @@ module "monitoring" {
 module "storage" {
   source = "./modules/storage"
 
-  project_name = var.project_name
+  project_name       = var.project_name
+  cloudfront_oac_arn = module.cdn.oac_arn
 }
 
 module "acm" {
@@ -84,3 +85,5 @@ module "dns" {
     aws = aws.us_east_1
   }
 }
+
+
