@@ -45,15 +45,14 @@ module "monitoring" {
 module "storage" {
   source = "./modules/storage"
 
-  project_name       = var.project_name
-  cloudfront_oac_arn = module.cdn.oac_arn
+  project_name = var.project_name
 }
 
 module "acm" {
   source = "./modules/acm"
 
-  domain_name       = var.domain_name
-  subdomain         = var.subdomain
+  domain_name        = var.domain_name
+  subdomain          = var.subdomain
   create_certificate = true
 
   providers = {
@@ -70,16 +69,16 @@ module "cdn" {
   bucket_arn   = module.storage.bucket_arn
 
   aliases         = ["${var.subdomain}.${var.domain_name}"]
-  certificate_arn = module.acm.certificate_arn
+  certificate_arn = module.dns.certificate_arn
 }
 
 module "dns" {
   source = "./modules/dns"
 
-  domain_name       = var.domain_name
-  subdomain         = var.subdomain
-  cloudfront_domain = module.cdn.cloudfront_domain
-  certificate_arn   = module.acm.certificate_arn
+  domain_name               = var.domain_name
+  subdomain                 = var.subdomain
+  cloudfront_domain         = module.cdn.cloudfront_domain
+  certificate_arn           = module.acm.certificate_arn
   domain_validation_options = module.acm.domain_validation_options
 
   providers = {

@@ -7,7 +7,7 @@ output "website_url" {
 }
 
 output "certificate_arn" {
-  value       = var.certificate_arn
+  value       = var.create_certificate ? aws_acm_certificate_validation.cdn[0].certificate_arn : var.certificate_arn
   description = "ARN of the validated ACM certificate for the FQDN"
 }
 
