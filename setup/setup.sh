@@ -5,15 +5,6 @@ echo
 echo "This script will create a terraform.tfvars file with your configuration."
 echo
 
-validate_domain() {
-    local domain=$1
-    if [[ $domain =~ ^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
 read -p "Enter project name (default: secure-web): " project_name
 project_name=${project_name:-secure-web}
 
@@ -33,21 +24,6 @@ fi
 read -p "Enter AWS Region (default: ap-south-1): " aws_region
 aws_region=${aws_region:-ap-south-1}
 
-while true; do
-    read -p "Enter Domain Name (e.g., example.com): " domain_name
-    if validate_domain "$domain_name"; then
-        break
-    else
-        echo "Invalid domain format. Please enter a valid domain (e.g., example.com)."
-    fi
-done
-
-read -p "Enter Subdomain (e.g., www): " subdomain
-if [ -z "$subdomain" ]; then
-    echo "Error: Subdomain is required."
-    exit 1
-fi
-
 read -p "Link to Public Git repo to be cloned (default: rlpvin/hello-world-page): " GIT_REPO
 GIT_REPO=${GIT_REPO:-https://github.com/rlpvin/hello-world-page.git}
 
@@ -56,8 +32,6 @@ project_name = "$project_name"
 aws_access_key = "$aws_access_key"
 aws_secret_key = "$aws_secret_key"
 aws_region     = "$aws_region"
-domain_name    = "$domain_name"
-subdomain      = "$subdomain"
 GIT_REPO        = "$GIT_REPO"
 EOF
 

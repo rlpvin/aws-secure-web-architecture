@@ -11,6 +11,7 @@ resource "aws_cloudfront_distribution" "this" {
   enabled             = true
   default_root_object = "index.html"
 
+  # ALB Origin (dynamic content)
   origin {
     domain_name = var.alb_dns_name
     origin_id   = "alb-origin"
@@ -23,14 +24,14 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
+  # S3 Origin (static content)
   origin {
     domain_name              = "${var.bucket_name}.s3.amazonaws.com"
     origin_id                = "s3-origin"
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
 
-  aliases = var.aliases
-
+  # Default behavior → ALB
   default_cache_behavior {
     target_origin_id       = "alb-origin"
     viewer_protocol_policy = "redirect-to-https"
@@ -40,12 +41,14 @@ resource "aws_cloudfront_distribution" "this" {
 
     forwarded_values {
       query_string = false
+
       cookies {
         forward = "none"
       }
     }
   }
 
+  # Static files → S3
   ordered_cache_behavior {
     path_pattern           = "/static/*"
     target_origin_id       = "s3-origin"
@@ -56,6 +59,7 @@ resource "aws_cloudfront_distribution" "this" {
 
     forwarded_values {
       query_string = false
+
       cookies {
         forward = "none"
       }
@@ -68,14 +72,13 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
+  # Use default CloudFront certificate
   viewer_certificate {
-    cloudfront_default_certificate = length(var.certificate_arn) == 0 ? true : false
-    acm_certificate_arn            = length(var.certificate_arn) > 0 ? var.certificate_arn : null
-    ssl_support_method             = length(var.certificate_arn) > 0 ? "sni-only" : null
-    minimum_protocol_version       = length(var.certificate_arn) > 0 ? "TLSv1.2_2021" : null
+    cloudfront_default_certificate = true
   }
 }
 
+# Allow CloudFront to access S3 bucket
 resource "aws_s3_bucket_policy" "cloudfront_access" {
   bucket = var.bucket_name
 

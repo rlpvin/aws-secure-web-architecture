@@ -22,16 +22,6 @@ variable "aws_secret_key" {
   sensitive   = true
 }
 
-variable "domain_name" {
-  type        = string
-  description = "Delegation"
-}
-
-variable "subdomain" {
-  type        = string
-  description = "CNAME record"
-}
-
 variable "GIT_REPO" {
   type        = string
   description = "Link to public Git repo to be cloned."
