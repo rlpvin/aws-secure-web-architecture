@@ -61,6 +61,8 @@ if (-not $subdomain) {
     exit 1
 }
 
+$gitRepo = Read-Input -Prompt "Link to public Git repo to be cloned (default: rlpvin/hello-world-page)" -Default "https://github.com/rlpvin/hello-world-page.git"
+
 @"
 project_name = "$projectName"
 aws_access_key = "$awsAccessKey"
@@ -68,6 +70,7 @@ aws_secret_key = "$awsSecretKey"
 aws_region     = "$awsRegion"
 domain_name    = "$domainName"
 subdomain      = "$subdomain"
+GIT_REPO        = "$env:GIT_REPO"
 "@ | Out-File -FilePath terraform.tfvars -Encoding utf8
 
 Write-Host

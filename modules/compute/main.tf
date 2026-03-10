@@ -47,7 +47,9 @@ resource "aws_launch_template" "this" {
     security_groups             = [var.ec2_security_group_id]
   }
 
-  user_data = base64encode(file("${path.root}/user-data/install-nginx.sh"))
+  user_data = base64encode(templatefile("${path.root}/user-data/install-nginx.sh", {
+    GIT_REPO = var.GIT_REPO
+  }))
 
   tag_specifications {
     resource_type = "instance"

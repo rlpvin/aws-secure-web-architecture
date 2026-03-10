@@ -9,3 +9,7 @@ variable "private_subnets" {
 variable "ec2_security_group_id" {
   type = string
 }
+
+variable "GIT_REPO" {
+  type = string
+}

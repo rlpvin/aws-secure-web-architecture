@@ -31,3 +31,8 @@ variable "subdomain" {
   type        = string
   description = "CNAME record"
 }
+
+variable "GIT_REPO" {
+  type        = string
+  description = "Link to public Git repo to be cloned."
+}

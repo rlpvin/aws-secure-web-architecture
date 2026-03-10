@@ -23,6 +23,7 @@ module "compute" {
   project_name          = var.project_name
   private_subnets       = module.network.private_subnets
   ec2_security_group_id = module.security.ec2_sg_id
+  GIT_REPO              = var.GIT_REPO
 }
 
 module "autoscaling" {

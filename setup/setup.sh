@@ -48,6 +48,9 @@ if [ -z "$subdomain" ]; then
     exit 1
 fi
 
+read -p "Link to Public Git repo to be cloned (default: rlpvin/hello-world-page): " GIT_REPO
+GIT_REPO=${GIT_REPO:-https://github.com/rlpvin/hello-world-page.git}
+
 cat > terraform.tfvars << EOF
 project_name = "$project_name"
 aws_access_key = "$aws_access_key"
@@ -55,6 +58,7 @@ aws_secret_key = "$aws_secret_key"
 aws_region     = "$aws_region"
 domain_name    = "$domain_name"
 subdomain      = "$subdomain"
+GIT_REPO        = "$GIT_REPO"
 EOF
 
 echo
