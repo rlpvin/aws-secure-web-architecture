@@ -1,6 +1,6 @@
 # AWS Secure Web Architecture
 
-This Terraform project deploys a secure, scalable web architecture on AWS featuring high availability, auto-scaling, and content delivery.
+This Terraform project deploys a secure, scalable web architecture on AWS featuring high availability and auto-scaling.
 
 ## Architecture Overview
 
@@ -27,11 +27,6 @@ The infrastructure consists of the following components:
 - **CloudFront CDN**: Global content delivery network for improved performance and security
 - **S3 Bucket**: Static asset storage integrated with CloudFront
 
-### DNS & Security
-
-- **Route53**: Domain name management
-- **ACM Certificate**: HTTPS encryption for the custom domain (managed in separate module)
-
 ### Monitoring
 
 - **CloudWatch**: Infrastructure monitoring and logging
@@ -47,12 +42,12 @@ The infrastructure consists of the following components:
 
    2. PowerShell:
 
-   ```bash
+   ```PowerShell
    .\\setup\\setup.ps1
    ```
 
    This will create a `terraform.tfvars` file with your AWS credentials and domain information.  
-   **Tip:** add `terraform.tfvars` to `.gitignore` to avoid committing sensitive data.
+   **Tip:** keep `terraform.tfvars` in `.gitignore` to avoid committing sensitive data.
 
 2. Initialize Terraform:
 
@@ -82,7 +77,6 @@ Once deployed, the web application will be accessible via:
 
 - Private subnets for EC2 instances (no direct internet access)
 - Security groups restricting traffic to necessary ports only
-- HTTPS encryption via SSL certificate with automatic HTTP-to-HTTPS redirect
 - CDN protection and caching
 - S3 bucket secured with Origin Access Control (OAC) policy
 
@@ -97,6 +91,4 @@ The project is organized into modular components:
 - `autoscaling`: Auto scaling group
 - `monitoring`: CloudWatch alarms
 - `storage`: S3 bucket with access policy
-- `acm`: ACM certificate management
 - `cdn`: CloudFront distribution
-- `dns`: Route53 domain management
