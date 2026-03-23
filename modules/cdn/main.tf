@@ -26,7 +26,7 @@ resource "aws_cloudfront_distribution" "this" {
 
   # S3 Origin (static content)
   origin {
-    domain_name              = "${var.bucket_name}.s3.amazonaws.com"
+    domain_name              = var.bucket_regional_domain_name
     origin_id                = "s3-origin"
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
@@ -91,8 +91,11 @@ resource "aws_s3_bucket_policy" "cloudfront_access" {
         Principal = {
           Service = "cloudfront.amazonaws.com"
         }
-        Action   = "s3:GetObject"
-        Resource = "${var.bucket_arn}/*"
+        Action   = ["s3:GetObject", "s3:ListBucket"]
+        Resource = [
+          var.bucket_arn,
+          "${var.bucket_arn}/*"
+        ]
         Condition = {
           StringEquals = {
             "AWS:SourceArn" = aws_cloudfront_distribution.this.arn

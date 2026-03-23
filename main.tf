@@ -24,6 +24,7 @@ module "compute" {
   private_subnets       = module.network.private_subnets
   ec2_security_group_id = module.security.ec2_sg_id
   GIT_REPO              = var.GIT_REPO
+  bucket_name           = module.storage.bucket_name
 }
 
 module "autoscaling" {
@@ -51,8 +52,9 @@ module "storage" {
 module "cdn" {
   source = "./modules/cdn"
 
-  project_name = var.project_name
-  alb_dns_name = module.loadbalancer.alb_dns_name
-  bucket_name  = module.storage.bucket_name
-  bucket_arn   = module.storage.bucket_arn
+  project_name                = var.project_name
+  alb_dns_name                = module.loadbalancer.alb_dns_name
+  bucket_name                 = module.storage.bucket_name
+  bucket_arn                  = module.storage.bucket_arn
+  bucket_regional_domain_name = module.storage.bucket_regional_domain_name
 }

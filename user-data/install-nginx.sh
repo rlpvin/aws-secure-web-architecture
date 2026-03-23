@@ -4,6 +4,7 @@ set -e
 exec > /var/log/user-data.log 2>&1
 
 GIT_REPO="${GIT_REPO}"
+BUCKET_NAME="${BUCKET_NAME}"
 
 yum update -y
 yum install -y nginx git
@@ -16,7 +17,13 @@ if [[ -n "$GIT_REPO" ]]; then
     
     git clone $GIT_REPO /usr/share/nginx/html/
 
-    CRON_JOB="0 0 * * * root cd /usr/share/nginx/html && /usr/bin/git pull >> /var/log/git-pull.log 2>&1"
+    # Initial upload to S3
+    if [[ -n "$BUCKET_NAME" ]]; then
+        aws s3 cp /usr/share/nginx/html/index.html s3://$BUCKET_NAME/static/index.html
+        aws s3 cp /usr/share/nginx/html/style.css s3://$BUCKET_NAME/static/style.css
+    fi
+
+    CRON_JOB="0 0 * * * root cd /usr/share/nginx/html && /usr/bin/git pull && /usr/bin/aws s3 sync . s3://$BUCKET_NAME/static/ --exclude '*' --include 'index.html' --include 'style.css' >> /var/log/site-sync.log 2>&1"
     echo "$CRON_JOB" > /etc/cron.d/site-update
     chmod 644 /etc/cron.d/site-update
 

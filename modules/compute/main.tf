@@ -28,6 +28,29 @@ resource "aws_iam_role_policy_attachment" "ec2_policy" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
+resource "aws_iam_role_policy" "s3_upload" {
+  name = "${var.project_name}-s3-upload-policy"
+  role = aws_iam_role.ec2_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "s3:PutObject",
+          "s3:PutObjectAcl",
+          "s3:ListBucket"
+        ]
+        Effect   = "Allow"
+        Resource = [
+          "arn:aws:s3:::${var.bucket_name}",
+          "arn:aws:s3:::${var.bucket_name}/*"
+        ]
+      }
+    ]
+  })
+}
+
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "${var.project_name}-ec2-profile"
   role = aws_iam_role.ec2_role.name
@@ -48,7 +71,8 @@ resource "aws_launch_template" "this" {
   }
 
   user_data = base64encode(templatefile("${path.root}/user-data/install-nginx.sh", {
-    GIT_REPO = var.GIT_REPO
+    GIT_REPO    = var.GIT_REPO
+    BUCKET_NAME = var.bucket_name
   }))
 
   tag_specifications {

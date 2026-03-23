@@ -5,3 +5,7 @@ output "alb_dns" {
 output "cloudfront_url" {
   value = "http://${module.cdn.cloudfront_domain}"
 }
+
+output "static_bucket_name" {
+  value = module.storage.bucket_name
+}

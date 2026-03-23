@@ -13,3 +13,7 @@ variable "ec2_security_group_id" {
 variable "GIT_REPO" {
   type = string
 }
+
+variable "bucket_name" {
+  type = string
+}
